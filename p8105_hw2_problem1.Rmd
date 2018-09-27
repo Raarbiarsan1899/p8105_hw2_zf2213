@@ -1,0 +1,18 @@
+---
+title: "P8105 Homework 2 Problem 1"
+author: "Zanis Fang"
+date: "9/26/2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+```
+
+```{r}
+#load data
+raw_nyc_transit <- read_csv(file = "./data/NYC_Transit_Subway_Entrance_And_Exit_Data.csv")
+
+```
+

@@ -1,0 +1,18 @@
+---
+title: "P8105 Homwork 2 Problem 2"
+author: "Zanis Fang"
+date: "9/26/2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+```
+
+```{r}
+#load data
+trash_wheel <- readxl::read_xlsx("./data/HealthyHarborWaterWheelTotals2017-9-26.xlsx")
+
+```
+

@@ -1,0 +1,30 @@
+---
+title: "P8105 Homework 2 Problem 3"
+author: "Zanis Fang"
+date: "9/26/2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+#install p8105.datasets if not
+if(!"p8105.datasets" %in% installed.packages()){
+	devtools::install_github("p8105/p8105.datasets")
+}
+
+library(tidyverse)
+```
+
+
+```{r}
+# make a copy of the data frame
+brfss <- p8105.datasets::brfss_smart2010
+
+brfss <- brfss %>% 
+	janitor::clean_names() %>%
+	filter(topic == "Overall Health") %>% 
+	select(-class, -topic, -question, -sample_size, -(confidence_limit_low:geo_location))
+
+```
+
