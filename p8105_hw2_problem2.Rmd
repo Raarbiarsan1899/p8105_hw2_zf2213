@@ -10,9 +10,42 @@ knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
 ```
 
-```{r}
+**Read and clean the Mr. Trash Wheel sheet**
+
+```{r load}
 #load data
-trash_wheel <- readxl::read_xlsx("./data/HealthyHarborWaterWheelTotals2017-9-26.xlsx")
+trash_wheel <- readxl::read_xlsx("./data/HealthyHarborWaterWheelTotals2017-9-26.xlsx",
+																 sheet = 1,
+																 range = readxl::cell_cols("A:N"))
+
+trash_wheel <- trash_wheel %>% 
+	             janitor::clean_names() %>% 
+	             filter(!is.na(date)) %>% 
+	             mutate(sports_balls = sports_balls %>% round(0) %>% as.integer())
 
 ```
+
+**Read and clean precipitation data from 2016 and 2017**
+
+```{r precipitation}
+
+# define a function to load data and clean data
+prcp_load_clean <- function(wh_year) {
+	           
+	                 readxl::read_xlsx("./data/HealthyHarborWaterWheelTotals2017-9-26.xlsx",
+		                      					sheet = paste(wh_year, "Precipitation"),
+												      			range = "A2:B14"
+														      	) %>%
+		
+		               janitor::clean_names() %>% 
+	          	     filter(!is.na(total)) %>% 
+		               mutate(year = wh_year)
+	       
+}
+
+left_join(prcp_load_clean(2016), prcp_load_clean(2017), by = "month")
+
+
+```
+
 
