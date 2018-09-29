@@ -43,9 +43,11 @@ prcp_load_clean <- function(wh_year) {
 	       
 }
 
-left_join(prcp_load_clean(2016), prcp_load_clean(2017), by = "month")
+prcp_data <- rbind(prcp_load_clean(2016), prcp_load_clean(2017))
+prcp_data$month <- month.name[prcp_data$month]
+
 
 
 ```
 
-
+In Mr. Trash Wheel data, it describes the amount of trash each dumpster colloects. There are `r nrow(trash_wheel)` individual dumpsters. In each dumpster, it categorizes the kind of trash, like "plastic bags", "cigarette butts", etc. For precipitation data in 2017, there are in total `r sum(subset(prcp_data, year == 2017, select = total))` inch precipitation. The median number of sports balls in a dumpster in 2016 is `r median(subset(trash_wheel, year == 2016, select = sports_balls)[[1]])`.

@@ -9,22 +9,60 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 
 #install p8105.datasets if not
-if(!"p8105.datasets" %in% installed.packages()){
+if (!"p8105.datasets" %in% installed.packages()) {
 	devtools::install_github("p8105/p8105.datasets")
 }
 
 library(tidyverse)
 ```
 
-
+### load data and data cleaning
 ```{r}
 # make a copy of the data frame
 brfss <- p8105.datasets::brfss_smart2010
 
+# clean the data
 brfss <- brfss %>% 
-	janitor::clean_names() %>%
-	filter(topic == "Overall Health") %>% 
-	select(-class, -topic, -question, -sample_size, -(confidence_limit_low:geo_location))
+	# get Overall Health topic
+	filter(Topic == "Overall Health") %>%
+	# remove unwanted variables
+	select(-Class, -Topic, -Question, -Sample_Size, -(Confidence_limit_Low:GeoLocation)) %>% 
+  # make human readable table
+	spread(key = Response, value = Data_value) %>% 
+	# clean column name
+	janitor::clean_names() %>% 
+	# rearrange the columns
+	select(year, locationabbr, locationdesc, excellent, very_good, good, fair, poor) %>%
+	separate(locationdesc, c("state", "county"), sep = " - ")
+
+sum(brfss$state == brfss$locationabbr)
+
+# create a function to fill NA values with mean of the column
+remove_na <- function(ncolumn) {
+	ncolumn[which(is.na(ncolumn))] <- mean(ncolumn[[1]], na.rm = TRUE)
+	return(ncolumn)
+}
+
+# fill the NAs
+brfss[4:8] <- sapply(brfss[4:8], remove_na)
+brfss <- mutate(brfss,
+								prop_high = (excellent + very_good) / (excellent + very_good + good + fair + poor))
+
+
+table(brfss$locationabbr)
+
+```
+
+**How many unique locations are included in the dataset? Is every state represented? What state is observed the most?**
+
+There are `r nrow(distinct(brfss, locationdesc))` unique locations. There are `r nrow(distinct(brfss, locationabbr))` states, all represented. 
+
+
+**In 2002, what is the median of the “Excellent” response value?**
+Median is `r median(brfss[which(brfss$year == 2002), ]$excellent)`.
+
+```{r}
+ggplot(brfss[which(brfss$year == 2002),], aes(x = excellent)) + geom_histogram()
 
 ```
 
