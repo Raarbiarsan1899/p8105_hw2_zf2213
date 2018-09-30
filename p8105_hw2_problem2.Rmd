@@ -2,11 +2,7 @@
 title: "P8105 Homwork 2 Problem 2"
 author: "Zanis Fang"
 date: "9/26/2018"
-output: 
-  html_document:
-    toc: TRUE
-    toc_float: TRUE
-    code_folding: show
+output: github_document
 ---
 
 ```{r setup, include=FALSE}
