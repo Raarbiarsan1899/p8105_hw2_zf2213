@@ -2,7 +2,11 @@
 title: "P8105 Homework 2 Problem 1"
 author: "Zanis Fang"
 date: "9/26/2018"
-output: html_document
+output:
+  html_document:
+    toc: TRUE
+    toc_float: TRUE
+    code_folding: show
 ---
 
 ```{r setup, include=FALSE}
@@ -12,7 +16,7 @@ library(tidyverse)
 
 ### Data loading and cleaning
 
-```{r load_clean}
+```{r load_clean, message = FALSE}
 # load data
 raw_nyc_transit <- read_csv(file = "./data/NYC_Transit_Subway_Entrance_And_Exit_Data.csv")
 
@@ -39,7 +43,7 @@ There are `r nrow(station_ada)` distinct stations.
 
 **Q2. How many stations are ADA compliant?**
 
-There are `r sum(station_ada$ada)` stations are ADA compliant.
+There are `r sum(station_ada$ada)` stations which are ADA compliant.
 
 **Q3. What proportion of station entrances / exits without vending allow entrance?**
 

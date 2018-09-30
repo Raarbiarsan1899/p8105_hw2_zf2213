@@ -2,7 +2,11 @@
 title: "P8105 Homework 2 Problem 3"
 author: "Zanis Fang"
 date: "9/26/2018"
-output: html_document
+output:
+  html_document:
+    toc: TRUE
+    toc_flot: TRUE
+    code_folding: show
 ---
 
 ```{r setup, include=FALSE}
@@ -16,8 +20,9 @@ if (!"p8105.datasets" %in% installed.packages()) {
 library(tidyverse)
 ```
 
-### load data and data cleaning
-```{r}
+### load data and data cleaning:
+
+```{r loading_cleaning}
 # make a copy of the data frame
 brfss <- p8105.datasets::brfss_smart2010
 
@@ -31,38 +36,67 @@ brfss <- brfss %>%
 	spread(key = Response, value = Data_value) %>% 
 	# clean column name
 	janitor::clean_names() %>% 
-	# rearrange the columns
-	select(year, locationabbr, locationdesc, excellent, very_good, good, fair, poor) %>%
-	separate(locationdesc, c("state", "county"), sep = " - ")
+	# rearrange the columns, remove locationabbr, which is included in locationdesc
+	select(year, locationdesc, excellent, very_good, good, fair, poor) %>%
+	# seperate locationdesc into state and area (county and municipal)
+	separate(locationdesc, c("state", "area"), sep = " - ")
 
-sum(brfss$state == brfss$locationabbr)
+# For each location, the sum of values from excellent to poor is roughly 100
 
 # create a function to fill NA values with mean of the column
 remove_na <- function(ncolumn) {
+	# For tibble dataset, double square bracket is needed for mean function
 	ncolumn[which(is.na(ncolumn))] <- mean(ncolumn[[1]], na.rm = TRUE)
 	return(ncolumn)
 }
 
 # fill the NAs
 brfss[4:8] <- sapply(brfss[4:8], remove_na)
+
+# calculate the proportion of excellent and very good ones
+# for each location total is roughly 100
 brfss <- mutate(brfss,
-								prop_high = (excellent + very_good) / (excellent + very_good + good + fair + poor))
-
-
-table(brfss$locationabbr)
+								prop_high = (excellent + very_good) / 100)
 
 ```
 
+### Answer questions:
+
 **How many unique locations are included in the dataset? Is every state represented? What state is observed the most?**
 
-There are `r nrow(distinct(brfss, locationdesc))` unique locations. There are `r nrow(distinct(brfss, locationabbr))` states, all represented. 
+```{r count_state_represents}
+# count the represents in each state
+state_reps <- brfss %>% 
+	            group_by(state) %>%
+	            summarize(n()) %>%
+	            rename("represents" = "n()")
+```
 
+There are `r nrow(distinct(brfss, state, area))` unique locations. There are `r nrow(distinct(brfss, state))` states, all states are represented. The state observed most is `r state_reps[which.max(state_reps$represents), 1]`.
+</br>
 
 **In 2002, what is the median of the “Excellent” response value?**
+</br>
 Median is `r median(brfss[which(brfss$year == 2002), ]$excellent)`.
 
-```{r}
+
+**Make a histogram of “Excellent” response values in the year 2002.**
+
+```{r histogram_excellent_2002, message = FALSE}
+# making histogram of excellent in 2002
 ggplot(brfss[which(brfss$year == 2002),], aes(x = excellent)) + geom_histogram()
 
 ```
 
+**Make a scatterplot showing the proportion of “Excellent” response values in New York County and Queens County (both in NY State) in each year from 2002 to 2010.**
+
+```{r scatterplot_excellent_NY_ny_qs}
+# create a variable for plotting
+brfss_ny_qs <- brfss %>% filter(state == "NY", area %in% c("New York County", "Queens County"))
+
+# plot scatterplot of excellent in New York and Queens counties
+ggplot(brfss_ny_qs, aes(x = year, y = excellent / 100, color = area)) + 
+	geom_point() +
+	ylab("proportion of excellent")
+
+```
