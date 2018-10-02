@@ -23,9 +23,7 @@ trash_wheel <- trash_wheel %>%
 	             # omit rows counting totals, note only dumpsters have date information
 	             filter(!is.na(date)) %>% 
 	             # convert sports balls to integer variable
-	             mutate(sports_balls = sports_balls %>% round(0) %>% as.integer()) %>% 
-	             # note some NAs in "year" variable, simply get year from "date" variable
-	             mutate(year = lubridate::year(lubridate::ymd(date)))
+	             mutate(sports_balls = sports_balls %>% round(0) %>% as.integer())
 
 ```
 </br>
