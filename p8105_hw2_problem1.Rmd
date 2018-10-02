@@ -14,10 +14,10 @@ library(tidyverse)
 
 ```{r load_clean, message = FALSE}
 # load data
-raw_nyc_transit <- read_csv(file = "./data/NYC_Transit_Subway_Entrance_And_Exit_Data.csv")
+nyc_transit <- read_csv(file = "./data/NYC_Transit_Subway_Entrance_And_Exit_Data.csv")
 
 # data cleaning
-nyc_transit <- raw_nyc_transit %>% 
+nyc_transit <- nyc_transit %>% 
                janitor::clean_names() %>% 
                #select needed rows
                select(line:ada, -exit_only, -staffing, -staff_hours)  %>% 
@@ -43,7 +43,14 @@ There are `r sum(station_ada$ada)` stations which are ADA compliant.
 
 **Q3. What proportion of station entrances / exits without vending allow entrance?**
 
-The proportion of station entrances/exits without vending is `r sum(nyc_transit$vending == "NO") / nrow(nyc_transit)`.
+```{r}
+entry_no_vending <- nyc_transit %>% filter(vending == "NO", entry == TRUE)
+no_vending <- nyc_transit %>% filter(vending == "NO")
+
+```
+
+The proportion of station entrances/exits without vending is `r nrow(entry_no_vending) / nrow(no_vending)`.
+
 
 ### Reform table
 

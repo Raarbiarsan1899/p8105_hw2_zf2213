@@ -7,10 +7,10 @@ Zanis Fang
 
 ``` r
 # load data
-raw_nyc_transit <- read_csv(file = "./data/NYC_Transit_Subway_Entrance_And_Exit_Data.csv")
+nyc_transit <- read_csv(file = "./data/NYC_Transit_Subway_Entrance_And_Exit_Data.csv")
 
 # data cleaning
-nyc_transit <- raw_nyc_transit %>% 
+nyc_transit <- nyc_transit %>% 
                janitor::clean_names() %>% 
                #select needed rows
                select(line:ada, -exit_only, -staffing, -staff_hours)  %>% 
@@ -35,7 +35,12 @@ There are 84 stations which are ADA compliant.
 
 **Q3. What proportion of station entrances / exits without vending allow entrance?**
 
-The proportion of station entrances/exits without vending is 0.0979657.
+``` r
+entry_no_vending <- nyc_transit %>% filter(vending == "NO", entry == TRUE)
+no_vending <- nyc_transit %>% filter(vending == "NO")
+```
+
+The proportion of station entrances/exits without vending is 0.3770492.
 
 ### Reform table
 
