@@ -13,8 +13,8 @@ nyc_transit <- read_csv(file = "./data/NYC_Transit_Subway_Entrance_And_Exit_Data
 nyc_transit <- nyc_transit %>% 
                janitor::clean_names() %>% 
                #select needed rows
-               select(line:ada, -exit_only, -staffing, -staff_hours)  %>% 
-                 #recode entry to logic
+               select(line:ada, -exit_only, -staffing, -staff_hours)  %>%
+               #recode entry to logic
                mutate(entry = recode(entry, "YES" = TRUE, "NO" = FALSE))
 ```
 
@@ -45,15 +45,12 @@ The proportion of station entrances/exits without vending is 0.3770492.
 ### Reform table
 
 ``` r
-nyc_transit <- gather(nyc_transit,
-                                          key = "route_number",
-                                            value = "route_name",
-                                            route1:route11)
+nyc_transit <- gather(nyc_transit, key = "route_number", value = "route_name", route1:route11)
 
 # distinct station serve A train with ADA information
 station_train_a <- nyc_transit %>%
-                     distinct(line, station_name, route_name, ada) %>% 
-                     filter(route_name == "A")
+                   distinct(line, station_name, route_name, ada) %>% 
+                   filter(route_name == "A")
 ```
 
 There are 60 stations serve the A train, among which 17 are ADA compliant.

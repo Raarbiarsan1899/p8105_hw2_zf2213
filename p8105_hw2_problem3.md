@@ -14,8 +14,8 @@ brfss <- brfss %>%
     # get Overall Health topic
     filter(Topic == "Overall Health") %>%
     # remove unwanted variables
-    select(-Class, -Topic, -Question, -Sample_Size, -(Confidence_limit_Low:GeoLocation)) %>% 
-  # make human readable table
+    select(-Class, -Topic, -Question, -Sample_Size, -(Confidence_limit_Low:GeoLocation)) %>%
+    # make human readable table
     spread(key = Response, value = Data_value) %>% 
     # clean column name
     janitor::clean_names() %>% 
@@ -36,9 +36,9 @@ brfss <- mutate(brfss, prop_high = (excellent + very_good) / 100)
 ``` r
 # count the represents in each state
 state_reps <- brfss %>% 
-                group_by(state) %>%
-                summarize(n()) %>%
-                rename("represents" = "n()")
+              group_by(state) %>%
+              summarize(n()) %>%
+              rename("represents" = "n()")
 ```
 
 There are 404 unique locations. There are 51 states, all states are represented. The state observed most is NJ. </br>
@@ -49,7 +49,9 @@ There are 404 unique locations. There are 51 states, all states are represented.
 
 ``` r
 # making histogram of excellent in 2002
-ggplot(brfss[which(brfss$year == 2002),], aes(x = excellent)) + geom_histogram()
+ggplot(brfss[which(brfss$year == 2002),], aes(x = excellent)) +
+  geom_histogram() +
+  labs(x = "excellent values")
 ```
 
 ![](p8105_hw2_problem3_files/figure-markdown_github/histogram_excellent_2002-1.png)
@@ -62,8 +64,8 @@ brfss_ny_qs <- brfss %>% filter(state == "NY", area %in% c("New York County", "Q
 
 # plot scatterplot of excellent in New York and Queens counties
 ggplot(brfss_ny_qs, aes(x = year, y = excellent / 100, color = area)) + 
-    geom_point() +
-    ylab("proportion of excellent")
+  geom_point() +
+  labs(y = "proportion of excellent")
 ```
 
 ![](p8105_hw2_problem3_files/figure-markdown_github/scatterplot_excellent_NY_ny_qs-1.png)

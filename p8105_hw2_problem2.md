@@ -8,36 +8,34 @@ Zanis Fang
 ``` r
 #load data
 trash_wheel <- readxl::read_xlsx("./data/HealthyHarborWaterWheelTotals2017-9-26.xlsx",
-                                                                 sheet = 1,
-                                                                 range = readxl::cell_cols("A:N"))
+                                 sheet = 1,
+                                 range = readxl::cell_cols("A:N"))
 
-trash_wheel <- trash_wheel %>% 
-                 janitor::clean_names() %>% 
-                 # omit rows counting totals, note only dumpsters have date information
-                 filter(!is.na(date)) %>% 
-                 # convert sports balls to integer variable
-                 mutate(sports_balls = sports_balls %>% round(0) %>% as.integer())
+trash_wheel <- trash_wheel %>%
+               janitor::clean_names() %>%
+               # omit rows counting totals, note only dumpsters have date information
+               filter(!is.na(date)) %>%
+               # convert sports balls to integer variable
+               mutate(sports_balls = sports_balls %>% round(0) %>% as.integer())
 ```
-
-</br> </br>
 
 **Read and clean precipitation data from 2016 and 2017**
 
 ``` r
 # define a function to load data and clean data
 prcp_load_clean <- function(wh_year) {
-                     
-                     # load data
-                     readxl::read_xlsx("./data/HealthyHarborWaterWheelTotals2017-9-26.xlsx",
-                                                sheet = paste(wh_year, "Precipitation"),
-                                                                range = "A2:B14"
-                                                                ) %>%
-                       
-                       janitor::clean_names() %>%
-                       # remove rows without data
-                     filter(!is.na(total)) %>% 
-                       # add year variable
-                       mutate(year = wh_year)
+ 
+ # load data
+ readxl::read_xlsx("./data/HealthyHarborWaterWheelTotals2017-9-26.xlsx",
+                   sheet = paste(wh_year, "Precipitation"),
+                   range = "A2:B14"
+                   ) %>%
+  
+  janitor::clean_names() %>%
+  # remove rows without data
+  filter(!is.na(total)) %>%
+  # add year variable
+  mutate(year = wh_year)
            
 }
 
