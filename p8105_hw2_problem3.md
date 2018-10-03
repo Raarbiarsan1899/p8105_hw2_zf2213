@@ -24,22 +24,9 @@ brfss <- brfss %>%
     # seperate locationdesc into state and area (county and municipal)
     separate(locationdesc, c("state", "area"), sep = " - ")
 
-# For each location, the sum of values from excellent to poor is roughly 100
-
-# create a function to fill NA values with mean of the column
-remove_na <- function(ncolumn) {
-    # For tibble dataset, double square bracket is needed for mean function
-    ncolumn[which(is.na(ncolumn))] <- mean(ncolumn[[1]], na.rm = TRUE)
-    return(ncolumn)
-}
-
-# fill the NAs
-brfss[4:8] <- sapply(brfss[4:8], remove_na)
-
 # calculate the proportion of excellent and very good ones
-# for each location total is roughly 100
-brfss <- mutate(brfss,
-                                prop_high = (excellent + very_good) / 100)
+# for each location total is roughly 100, to be simple
+brfss <- mutate(brfss, prop_high = (excellent + very_good) / 100)
 ```
 
 ### Answer questions:
@@ -56,7 +43,7 @@ state_reps <- brfss %>%
 
 There are 404 unique locations. There are 51 states, all states are represented. The state observed most is NJ. </br>
 
-**In 2002, what is the median of the “Excellent” response value?** </br> Median is 23.8.
+**In 2002, what is the median of the “Excellent” response value?** </br> Median is 23.6.
 
 **Make a histogram of “Excellent” response values in the year 2002.**
 
