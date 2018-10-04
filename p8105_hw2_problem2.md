@@ -7,7 +7,7 @@ Zanis Fang
 
 ``` r
 #load data
-trash_wheel <- readxl::read_xlsx("./data/HealthyHarborWaterWheelTotals2017-9-26.xlsx",
+trash_wheel <- readxl::read_xlsx("./data/HealthyHarborWaterWheelTotals2018-7-28.xlsx",
                                  sheet = 1,
                                  range = readxl::cell_cols("A:N"))
 
@@ -26,7 +26,7 @@ trash_wheel <- trash_wheel %>%
 prcp_load_clean <- function(wh_year) {
  
  # load data
- readxl::read_xlsx("./data/HealthyHarborWaterWheelTotals2017-9-26.xlsx",
+ readxl::read_xlsx("./data/HealthyHarborWaterWheelTotals2018-7-28.xlsx",
                    sheet = paste(wh_year, "Precipitation"),
                    range = "A2:B14"
                    ) %>%
@@ -46,4 +46,4 @@ prcp_data <- rbind(prcp_load_clean(2016), prcp_load_clean(2017))
 prcp_data$month <- month.name[prcp_data$month]
 ```
 
-In Mr. Trash Wheel data, it describes the amount of trash each dumpster colloects. There are 215 individual dumpsters. In each dumpster, it categorizes the kind of trash, like "plastic bags", "cigarette butts", etc. For precipitation data in 2017, there are in total 29.93 inch precipitation. The median number of sports balls in a dumpster in 2016 is 26.
+In Mr. Trash Wheel data, it describes the amount of trash each dumpster colloects. There are 285 individual dumpsters. In each dumpster, it categorizes the kind of trash, like "plastic bags", "cigarette butts", etc. For precipitation data in 2017, there are in total 32.93 inch precipitation. The median number of sports balls in a dumpster in 2016 is 26.

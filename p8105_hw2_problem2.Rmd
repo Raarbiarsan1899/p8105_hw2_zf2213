@@ -14,7 +14,7 @@ library(tidyverse)
 
 ```{r load}
 #load data
-trash_wheel <- readxl::read_xlsx("./data/HealthyHarborWaterWheelTotals2017-9-26.xlsx",
+trash_wheel <- readxl::read_xlsx("./data/HealthyHarborWaterWheelTotals2018-7-28.xlsx",
                                  sheet = 1,
                                  range = readxl::cell_cols("A:N"))
 
@@ -36,7 +36,7 @@ trash_wheel <- trash_wheel %>%
 prcp_load_clean <- function(wh_year) {
  
  # load data
- readxl::read_xlsx("./data/HealthyHarborWaterWheelTotals2017-9-26.xlsx",
+ readxl::read_xlsx("./data/HealthyHarborWaterWheelTotals2018-7-28.xlsx",
                    sheet = paste(wh_year, "Precipitation"),
                    range = "A2:B14"
                    ) %>%
